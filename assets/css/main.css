@@ -1275,3 +1275,14 @@ main.about .hero-sub{
 
 html { scroll-behavior: smooth; }
 
+.footer-link{
+  color: rgba(244,247,255,.72);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(255,255,255,.18);
+}
+.footer-link:hover{
+  color: rgba(244,247,255,.92);
+  border-color: rgba(72,183,255,.32);
+}
+
+
