@@ -1246,3 +1246,25 @@ main.about .hero-sub{
     font-size: 15px;
   }
 }
+
+/* ===== About page: shrink hero typography ===== */
+.about-page .hero h1{
+  font-size: clamp(28px, 5.2vw, 44px) !important;
+  line-height: 1.10 !important;
+  letter-spacing: -0.6px !important;
+}
+
+.about-page .hero-sub{
+  font-size: 16px !important;
+  line-height: 1.55 !important;
+}
+
+@media (max-width: 520px){
+  .about-page .hero h1{
+    font-size: 30px !important;
+  }
+  .about-page .hero-sub{
+    font-size: 15px !important;
+  }
+}
+
