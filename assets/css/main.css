@@ -1733,6 +1733,61 @@ html { scroll-behavior: smooth; }
   padding-top: 34px !important;
   padding-bottom: 10px !important;
 }
+/* =============================
+   LEGAL PAGES: ALIGN EVERYTHING
+   (hero + TOC + content same width)
+============================= */
+
+/* one consistent reading width for ALL legal blocks */
+.legal-hero,
+.legal-wrap .legal-layout{
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+/* keep the page feeling tight */
+.legal-hero{
+  padding-top: 28px !important;
+  padding-bottom: 10px !important;
+}
+
+/* heading + chips on one line */
+.legal-hero-row{
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 14px;
+  flex-wrap: wrap; /* stacks nicely on small screens */
+}
+
+.legal-hero-row h1{
+  margin: 0 !important;
+}
+
+/* chips should NOT drop lower than the heading row */
+.legal-hero-row .legal-meta{
+  margin-top: 0 !important;
+}
+
+/* make subtitle align perfectly too */
+.legal-hero .hero-sub{
+  max-width: 72ch;
+}
+
+/* TOC + content already stacked (1 column) */
+.legal-layout{
+  grid-template-columns: 1fr !important;
+}
+
+/* small screens: keep it clean */
+@media (max-width: 700px){
+  .legal-hero-row{
+    align-items: flex-start;
+  }
+  .legal-hero-row .legal-meta{
+    width: 100%;
+  }
+}
 
 
 
