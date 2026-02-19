@@ -1285,4 +1285,456 @@ html { scroll-behavior: smooth; }
   border-color: rgba(72,183,255,.32);
 }
 
+/* -----------------------------
+   LEGAL PAGES (TOS / PRIVACY)
+------------------------------ */
+
+/* little pill chips (your legal pages use this class, but it had NO styling) */
+.chip{
+  display:inline-flex;
+  align-items:center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 12px;
+  letter-spacing: .02em;
+
+  color: rgba(244,247,255,.84);
+  border: 1px solid rgba(255,255,255,.14);
+  background:
+    radial-gradient(120px 80px at 20% 20%, rgba(34,211,197,.14), transparent 55%),
+    linear-gradient(135deg, rgba(8,14,26,.30), rgba(2,4,11,.18));
+  box-shadow:
+    0 16px 50px rgba(0,0,0,.30),
+    0 0 0 1px rgba(255,255,255,.05) inset;
+  backdrop-filter: blur(10px);
+}
+
+.legal-meta{
+  margin-top: 14px;
+  display:flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* layout */
+.legal-wrap{
+  padding: 40px 0 72px;
+}
+
+.legal-layout{
+  display:grid;
+  grid-template-columns: minmax(0,1fr) 320px;
+  gap: 18px;
+  align-items:start;
+}
+
+/* “glass card” that matches your other cards */
+.legal-card{
+  position: relative;
+  border-radius: 20px;
+  padding: 18px 18px 16px;
+
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(8,14,26,.22);
+
+  box-shadow:
+    0 24px 80px rgba(0,0,0,.42),
+    0 0 0 1px rgba(255,255,255,.04) inset;
+
+  backdrop-filter: blur(12px);
+}
+
+/* subtle gradient rim */
+.legal-card::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius: 20px;
+  padding:1px;
+  background: linear-gradient(
+    135deg,
+    rgba(72,183,255,.22),
+    rgba(34,211,197,.18),
+    rgba(215,181,107,.10),
+    rgba(255,255,255,.06)
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events:none;
+  opacity:.55;
+}
+
+.legal-card h2{
+  margin: 0 0 10px;
+  font-size: 24px;
+  letter-spacing: -0.35px;
+}
+
+.legal-card h3{
+  margin: 18px 0 10px;
+  font-size: 16px;
+  letter-spacing: -0.2px;
+  color: rgba(244,247,255,.90);
+}
+
+.legal-card p{
+  margin: 0 0 12px;
+  line-height: 1.65;
+  color: rgba(244,247,255,.78);
+}
+
+.legal-card strong{
+  color: rgba(244,247,255,.92);
+}
+
+/* lists */
+.legal-card ul{
+  margin: 8px 0 14px 18px;
+  color: rgba(244,247,255,.78);
+}
+
+.legal-card li{
+  margin: 7px 0;
+  line-height: 1.6;
+}
+
+.legal-card li::marker{
+  color: rgba(72,183,255,.70);
+}
+
+/* content links (avoid default blue browser links) */
+.legal-card a{
+  color: rgba(72,183,255,.92);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(72,183,255,.28);
+}
+.legal-card a:hover{
+  color: rgba(244,247,255,.92);
+  border-color: rgba(34,211,197,.40);
+}
+
+/* table of contents */
+.legal-toc{
+  position: sticky;
+  top: 92px; /* sticky header offset */
+  padding: 18px;
+}
+
+.legal-toc h3{
+  margin: 0 0 10px;
+}
+
+.legal-toc a{
+  display:block;
+  padding: 10px 12px;
+  border-radius: 14px;
+  margin-top: 10px;
+
+  color: rgba(244,247,255,.84);
+  text-decoration:none;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(2,4,11,.18);
+
+  transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease, background .15s ease;
+}
+
+.legal-toc a:hover{
+  transform: translateY(-1px);
+  border-color: rgba(72,183,255,.26);
+  background: rgba(8,14,26,.26);
+  box-shadow: 0 18px 60px rgba(0,0,0,.35);
+}
+
+.legal-toc a:focus-visible{
+  outline: 2px solid rgba(72,183,255,.50);
+  outline-offset: 2px;
+}
+
+/* make anchor jumps land nicely under sticky header */
+.legal-card [id]{
+  scroll-margin-top: 108px;
+}
+
+/* highlight the section you jumped to */
+.legal-card :target{
+  position: relative;
+}
+.legal-card :target::after{
+  content:"";
+  position:absolute;
+  left:-10px;
+  right:-10px;
+  bottom:-6px;
+  height: 2px;
+  background: linear-gradient(90deg, rgba(72,183,255,.55), rgba(34,211,197,.45), transparent);
+  opacity: .9;
+}
+
+.legal-note{
+  margin-top: 12px;
+  font-size: 13px;
+  color: rgba(244,247,255,.62);
+}
+
+/* responsive */
+@media (max-width: 980px){
+  .legal-layout{ grid-template-columns: 1fr; }
+  .legal-toc{ position: relative; top:auto; }
+  .legal-wrap{ padding-top: 24px; }
+}
+
+/* =============================
+   LEGAL PAGES FIX (OVERRIDE)
+   fixes: TOC too wide + content squeezed
+============================= */
+
+/* 1) FIX THE GRID: TOC fixed, CONTENT flexible */
+.legal-layout{
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+}
+
+/* Optional: keep reading width nice on huge screens */
+@media (min-width: 1200px){
+  .legal-layout{
+    grid-template-columns: 280px minmax(0, 860px);
+    justify-content: center;
+  }
+}
+
+/* 2) TOC: stop making it a massive “full card” */
+.legal-toc{
+  position: sticky;
+  top: 92px;
+  max-height: calc(100vh - 120px);
+  overflow: auto;
+
+  padding: 16px !important;
+}
+
+/* Make TOC links look clean + compact (not long pills) */
+.legal-toc a{
+  display: flex;
+  gap: 10px;
+  align-items: center;
+
+  padding: 10px 12px;
+  margin-top: 10px;
+
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.10);
+  background: rgba(2,4,11,.18);
+
+  color: rgba(244,247,255,.82);
+  text-decoration: none;
+
+  transition: transform .15s ease, border-color .15s ease, background .15s ease;
+}
+
+.legal-toc a:hover{
+  transform: translateY(-1px);
+  border-color: rgba(72,183,255,.30);
+  background: rgba(8,14,26,.26);
+}
+
+/* 3) CONTENT: give it breathing room */
+.legal-layout > article.legal-card{
+  padding: 26px !important;
+}
+
+.legal-card h2{
+  font-size: 28px !important;
+  letter-spacing: -0.4px;
+  margin-bottom: 10px;
+}
+
+.legal-card p, .legal-card li{
+  font-size: 15.5px;
+  line-height: 1.75;
+  color: rgba(244,247,255,.78);
+}
+
+/* stop bullet lists from looking cramped */
+.legal-card ul{
+  margin: 10px 0 16px 20px;
+}
+
+/* mobile */
+@media (max-width: 980px){
+  .legal-layout{
+    grid-template-columns: 1fr;
+  }
+  .legal-toc{
+    position: relative;
+    top: auto;
+    max-height: none;
+  }
+}
+
+/* =============================
+   LEGAL PAGES: STACKED LAYOUT
+   (TOC on top, content below)
+============================= */
+
+.legal-layout{
+  display: grid;
+  grid-template-columns: 1fr !important;  /* single column */
+  gap: 18px;
+}
+
+/* TOC becomes a horizontal “button grid” instead of a tall sidebar */
+.legal-toc{
+  position: relative !important;
+  top: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+
+  padding: 16px !important;
+}
+
+/* make the TOC links wrap nicely across rows */
+.legal-toc a{
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+
+  margin: 10px 10px 0 0 !important; /* space between pills */
+  padding: 10px 12px !important;
+  border-radius: 999px !important;
+
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(2,4,11,.18);
+  color: rgba(244,247,255,.84);
+  text-decoration: none;
+  white-space: nowrap;
+
+  transition: transform .15s ease, border-color .15s ease, background .15s ease;
+}
+
+.legal-toc a:hover{
+  transform: translateY(-1px);
+  border-color: rgba(72,183,255,.30);
+  background: rgba(8,14,26,.26);
+}
+
+/* content card spacing */
+.legal-layout > article.legal-card{
+  padding: 26px !important;
+}
+
+.legal-card h2{
+  font-size: 28px !important;
+  margin-bottom: 10px;
+}
+
+.legal-card p, .legal-card li{
+  font-size: 15.5px;
+  line-height: 1.75;
+}
+
+/* =============================
+   LEGAL PAGES: CLEANER + SMALLER
+   (content tighter, nicer reading width)
+============================= */
+
+/* keep stacked layout */
+.legal-layout{
+  grid-template-columns: 1fr !important;
+  gap: 14px !important;
+}
+
+/* limit reading width + center */
+.legal-wrap{
+  padding: 26px 0 56px !important;
+}
+.legal-wrap .legal-layout{
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+/* TOC chips: smaller + cleaner */
+.legal-toc{
+  padding: 14px !important;
+}
+.legal-toc a{
+  padding: 8px 10px !important;
+  font-size: 12px !important;
+  font-weight: 700;
+  margin: 8px 8px 0 0 !important;
+  border-radius: 999px !important;
+  opacity: .92;
+}
+
+/* content card: tighter */
+.legal-layout > article.legal-card{
+  padding: 18px 18px 14px !important;
+  border-radius: 18px;
+}
+
+/* headings: smaller + consistent */
+.legal-card h2{
+  font-size: 20px !important;
+  margin: 18px 0 8px !important;
+  letter-spacing: -0.25px;
+}
+.legal-card h2:first-of-type{
+  margin-top: 0 !important;
+}
+
+/* optional subtle divider between sections */
+.legal-card h2{
+  padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,.08);
+}
+.legal-card h2:first-of-type{
+  border-top: 0;
+  padding-top: 0;
+}
+
+/* body text: smaller + cleaner */
+.legal-card p{
+  font-size: 14px !important;
+  line-height: 1.7 !important;
+  margin: 0 0 10px !important;
+  color: rgba(244,247,255,.76);
+}
+.legal-card li{
+  font-size: 14px !important;
+  line-height: 1.65 !important;
+  margin: 6px 0 !important;
+}
+.legal-card ul{
+  margin: 8px 0 12px 18px !important;
+}
+
+/* make links subtle (not screaming) */
+.legal-card a{
+  border-bottom: 1px solid rgba(72,183,255,.20) !important;
+}
+.legal-card a:hover{
+  border-bottom-color: rgba(34,211,197,.30) !important;
+}
+
+/* meta chips smaller */
+.legal-meta .chip{
+  padding: 7px 10px !important;
+  font-size: 11px !important;
+}
+
+/* reduce hero spacing a bit on legal pages */
+.hero{
+  padding-top: 34px !important;
+  padding-bottom: 10px !important;
+}
+
+
+
+
 
