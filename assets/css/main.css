@@ -1268,3 +1268,8 @@ main.about .hero-sub{
   }
 }
 
+/* Hide the countdown target date (still readable by JS) */
+.snapshot-side .count-date{
+  display: none;
+}
+
