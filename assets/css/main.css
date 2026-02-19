@@ -1273,3 +1273,5 @@ main.about .hero-sub{
   display: none;
 }
 
+html { scroll-behavior: smooth; }
+
