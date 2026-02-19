@@ -1240,4 +1240,148 @@ main > section.container + section.container{
   line-height: 1.55;
   color: rgba(244,247,255,.62);
 }
+/* =========================
+   MOBILE FIX PACK (paste at bottom)
+   ========================= */
+
+@media (max-width: 600px){
+
+  /* Stop the page feeling cramped + fix iOS safe areas */
+  body{
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+  }
+
+  /* NAV: make buttons full width in the dropdown, larger tap targets */
+  .btn{
+    min-height: 44px;          /* proper tap target */
+    font-size: 14px;
+  }
+
+  .nav-shell{
+    padding: 12px 0;
+    grid-template-columns: auto 1fr auto;
+  }
+
+  .actions{
+    left: 12px;
+    right: 12px;
+    top: 70px;
+  }
+
+  /* HERO: make it phone-first */
+  .hero{
+    padding: 44px 0 18px;
+  }
+
+  .hero-copy{
+    text-align: left;
+  }
+
+  h1{
+    font-size: 34px;          /* clamp can still get too big */
+    line-height: 1.05;
+  }
+
+  .hero-sub{
+    font-size: 15px;
+    line-height: 1.55;
+  }
+
+  /* Stack CTAs and make them full width */
+  .hero-ctas{
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .hero-ctas .btn{
+    width: 100%;
+  }
+
+  /* HERO IMAGE: make it visually big WITHOUT cropping */
+  .hero-media{
+    padding-top: 14px;
+  }
+
+  .hero-visual{
+    border-radius: 18px;
+    /* give it a stable "frame" on mobile */
+    aspect-ratio: 16 / 9;
+    display: grid;
+    place-items: center;
+  }
+
+  .hero-visual .hero-img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;      /* NO crop */
+    object-position: center;
+  }
+
+  /* HOW / WHY grids: single column + less padding */
+  .step-grid,
+  .why-grid{
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .info-card{
+    padding: 14px;
+  }
+
+  /* FULL-BLEED: 100vw + negative margins causes weird mobile jitter.
+     On phones: turn it into normal width with small edge padding */
+  .full-bleed{
+    width: 100%;
+    left: auto;
+    right: auto;
+    margin-left: 0;
+    margin-right: 0;
+  }
+
+  .full-bleed .slider-track{
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  /* Slider: make each card almost full width so it feels intentional */
+  .slide{
+    flex: 0 0 92vw;
+  }
+
+  /* Snapshot: reduce padding + make it tighter */
+  .snapshot{
+    padding: 14px;
+    gap: 12px;
+  }
+  .count{
+    font-size: 28px;
+  }
+
+  /* Skins: keep cards clean on small screens */
+  .skins-grid{
+    gap: 14px;
+  }
+  .skin-card{
+    padding: 16px;
+  }
+  .skin-img{
+    max-height: 110px;
+  }
+
+  /* Price rows: already stack at 720px, but tighten spacing */
+  .price-row{
+    padding: 12px 14px;
+  }
+
+  /* Footer: less air */
+  main{ padding-bottom: 36px; }
+  .site-footer{ margin-top: 24px; }
+}
+
+@media (max-width: 380px){
+  h1{ font-size: 30px; }
+  .hero-kicker{ font-size: 11px; }
+}
+
 
