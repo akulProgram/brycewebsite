@@ -23,7 +23,9 @@
 }
 
 *{ box-sizing:border-box; }
-html,body{ height:100%; }
+html{ min-height: 100%; }
+body{ min-height: 100%; height: auto; }
+
 
 body{
   margin:0;
@@ -1425,6 +1427,128 @@ body{
     right: auto !important;
     margin-left: 0 !important;
     margin-right: 0 !important;
+  }
+}
+
+/* =========================
+   MOBILE: background fills whole page + hero image under text
+   Paste at the VERY bottom
+   ========================= */
+
+@media (max-width: 900px){
+
+  /* 1) Make sure there is NEVER a white/grey canvas behind the page */
+  html, body{
+    height: 100%;
+    background: #02040b !important;          /* fallback behind everything */
+  }
+
+  /* Put your real site background on BODY so it covers the whole scroll */
+  body{
+    min-height: 100dvh;
+    background-color: #02040b !important;
+
+    /* If your desktop uses gradients, keep them on mobile too */
+    background-image:
+      radial-gradient(1200px 700px at 60% 15%, rgba(24,66,105,.58), transparent 60%),
+      radial-gradient(900px 520px at 20% 30%, rgba(35,110,170,.35), transparent 60%),
+      radial-gradient(700px 420px at 70% 60%, rgba(160,120,40,.12), transparent 65%),
+      linear-gradient(180deg, #02040b, #061528) !important;
+
+    background-attachment: scroll !important; /* iOS + fixed = bugs/grey */
+  }
+
+  /* 2) KILL any white wrapper backgrounds that are overriding body */
+  main, .page, .wrapper, .layout, .content, .site, .app{
+    background: transparent !important;
+  }
+
+  /* If you have a big hero “panel” background ONLY on the left, force full width */
+  .hero, .hero-left, .hero-content, .hero-copy{
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  /* 3) STACK hero so image goes UNDER the text block (including that rules line) */
+  .hero-inner, .hero-grid, .hero-split, .hero-layout{
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+
+  /* Put media AFTER the copy on mobile */
+  .hero-media, .hero-right, .hero-image{
+    order: 99 !important;
+    margin-top: 14px !important;
+  }
+
+  /* Make hero image big on mobile without cropping */
+  .hero-visual, .hero-media, .hero-image{
+    width: 100% !important;
+  }
+
+  .hero-img, .hero-visual img, .hero-image img{
+    width: 100% !important;
+    height: auto !important;
+    max-width: 100% !important;
+    object-fit: contain !important;
+    object-position: center !important;
+    display: block !important;
+  }
+
+  /* 4) Stop 100vw/negative-margin sections from creating white side gaps */
+  .full-bleed{
+    width: 100% !important;
+    left: auto !important;
+    right: auto !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
+/* =========================
+   MOBILE HERO ORDER FIX (no HTML changes)
+   Hero -> Image -> How
+   ========================= */
+
+.top-split{
+  grid-template-areas:
+    "hero media"
+    "how  media";
+}
+
+.top-left{ display: contents; } /* lets children become grid items */
+
+.top-split .hero{ grid-area: hero; }
+.top-split #how{ grid-area: how; }
+.top-split .top-right{ grid-area: media; }
+
+@media (max-width: 900px){
+  .top-split{
+    grid-template-columns: 1fr !important;
+    grid-template-areas:
+      "hero"
+      "media"
+      "how";
+    gap: 18px !important;
+  }
+
+  .top-right{
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  .hero-visual{
+    width: 100% !important;
+    max-width: 100% !important;
+    border-radius: 18px;
+  }
+
+  /* keep image big + no crop */
+  .hero-visual .hero-img{
+    width: 100% !important;
+    height: auto !important;
+    object-fit: contain !important;
   }
 }
 
