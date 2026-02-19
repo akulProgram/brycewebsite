@@ -16,19 +16,20 @@
   --section-pad-y: 64px;
   --section-pad-y-sm: 44px;
   --section-head-gap: 18px;
-
-  --section-pad-y: var(--section-pad-y-sm);
-  --section-head-gap: 14px;
-
+  --section-head-gap-sm: 14px;
 }
 
 *{ box-sizing:border-box; }
-html{ min-height: 100%; }
-body{ min-height: 100%; height: auto; }
 
+html{
+  min-height: 100%;
+  background: var(--bg0); /* prevents iOS grey/white canvas */
+}
 
 body{
   margin:0;
+  min-height: 100%;
+  height: auto;
   font-family: var(--font);
   color: var(--text);
   overflow-x:hidden;
@@ -37,7 +38,7 @@ body{
     radial-gradient(900px 520px at 14% 18%, rgba(34,211,197,.15), transparent 60%),
     radial-gradient(700px 420px at 82% 28%, rgba(72,183,255,.12), transparent 55%),
     radial-gradient(600px 460px at 58% 78%, rgba(215,181,107,.08), transparent 60%),
-    /* push the return-to-dark past the viewport so there’s no visible seam */
+    /* push return-to-dark past viewport so there’s no seam */
     linear-gradient(180deg, rgba(2,4,11,1) 0%, rgba(6,21,40,1) 65%, rgba(2,4,11,1) 220%);
 
   background-repeat: no-repeat;
@@ -49,9 +50,8 @@ body{
   body{ background-attachment: scroll; }
 }
 
-
-/* subtle "scale/noise" feel */
-body:before{
+/* subtle “scale/noise” feel (disable on mobile iOS to avoid grey/washed rendering) */
+body::before{
   content:"";
   position: fixed;
   inset:-120px;
@@ -63,6 +63,9 @@ body:before{
     radial-gradient(circle at 40% 75%, rgba(255,255,255,.03), transparent 35%),
     radial-gradient(circle at 85% 80%, rgba(255,255,255,.025), transparent 35%);
   filter: blur(10px);
+}
+@media (max-width: 900px){
+  body::before{ display:none; }
 }
 
 /* reusable container */
@@ -84,7 +87,6 @@ body:before{
   border-bottom: 1px solid rgba(255,255,255,.08);
 }
 
-/* logo pinned left, actions centered */
 .nav-shell{
   position: relative;
   width: 100%;
@@ -94,6 +96,7 @@ body:before{
   padding: 14px clamp(12px, 2vw, 22px);
 }
 
+/* logo pinned left, actions centered */
 .brand{
   display:flex;
   align-items:center;
@@ -123,7 +126,9 @@ body:before{
 .actions{
   display:flex;
   align-items:center;
+  justify-content:center;
   gap:18px;
+  flex-wrap: wrap;
 }
 
 .btn{
@@ -174,35 +179,26 @@ body:before{
 }
 
 /* -----------------------------
-   HERO TITLE (LEFT)
+   HERO + TOP SPLIT LAYOUT
 ------------------------------ */
-.hero-title{
-  padding: 56px 0 0;
-  text-align:left;
+.top-split{
+  width:min(var(--container), calc(100% - 2rem));
+  margin:0 auto;
+  display:grid;
+  grid-template-columns: minmax(0, 720px) minmax(0, 1fr);
+  gap: clamp(18px, 4vw, 64px);
+  align-items:start;
 }
 
-.hero-title h1{
-  margin: 0;
-  font-size: clamp(44px, 6vw, 78px);
-  line-height: 1.05;
-  letter-spacing: -1px;
-  text-shadow:
-    0 10px 50px rgba(0,0,0,.55),
-    0 0 24px rgba(34,211,197,.10);
+/* keep this as-is on desktop */
+.top-left{ display:block; }
+
+.top-right{
+  padding-top: 76px;
+  padding-bottom: 36px;
 }
 
-.hero-title h1:after{
-  content:"";
-  display:block;
-  width: min(420px, 90%);
-  height: 1px;
-  margin: 18px 0 0;
-  background: linear-gradient(90deg, rgba(72,183,255,.35), rgba(34,211,197,.35), transparent);
-}
-
-/* -----------------------------
-   HERO + SECTION STACK
------------------------------- */
+/* HERO */
 .hero{
   padding: 76px 0 36px;
   text-align: left;
@@ -230,7 +226,7 @@ body:before{
     0 0 24px rgba(34,211,197,.10);
 }
 
-.hero h1:after{
+.hero h1::after{
   content:"";
   display:block;
   width: min(520px, 92%);
@@ -267,7 +263,41 @@ body:before{
   padding: 0 6px;
 }
 
-/* shared section layout */
+/* HERO VISUAL */
+.hero-visual{
+  position: relative;
+  display:block;
+  width: clamp(520px, 60vw, 700px);
+  margin-left: auto;
+  margin-right: auto;
+  border-radius: 22px;
+  border: 1px solid rgba(255,255,255,.12);
+  overflow: hidden;
+
+  animation: heroSlideIn 1.7s cubic-bezier(.2,.9,.2,1) both;
+  will-change: transform, opacity;
+}
+
+.hero-visual .hero-img{
+  display:block;
+  width:100%;
+  height:auto;
+  object-fit: contain;
+  object-position: center;
+}
+
+@keyframes heroSlideIn{
+  from{ transform: translateX(-1000px); opacity: 0; }
+  to  { transform: translateX(0); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .hero-visual{ animation:none; }
+}
+
+/* -----------------------------
+   SHARED SECTION LAYOUT
+------------------------------ */
 .section{
   padding: var(--section-pad-y) 0;
 }
@@ -289,15 +319,12 @@ body:before{
   line-height: 1.55;
 }
 
-.section-head.compact{
-  margin-bottom: 6px;
-}
+.section-head.compact{ margin-bottom: 6px; }
+.section-cta{ margin-top: 14px; }
 
-.section-cta{
-  margin-top: 14px;
-}
-
-/* cards & grids */
+/* -----------------------------
+   CARDS & GRIDS
+------------------------------ */
 .step-grid,
 .why-grid{
   display:grid;
@@ -373,7 +400,9 @@ body:before{
   background: rgba(2,4,11,.22);
 }
 
-/* competition snapshot */
+/* -----------------------------
+   COMPETITION SNAPSHOT
+------------------------------ */
 .snapshot{
   display:grid;
   grid-template-columns: 1.25fr .9fr auto;
@@ -401,14 +430,12 @@ body:before{
   padding: 10px 0;
   border-bottom: 1px solid rgba(255,255,255,.07);
 }
-
-.snapshot-row:last-child{ border-bottom: none; }
+.snapshot-row:last-child{ border-bottom:none; }
 
 .snapshot-row .k{
   color: rgba(244,247,255,.62);
   font-weight: 700;
 }
-
 .snapshot-row .v{
   color: rgba(244,247,255,.88);
   font-weight: 900;
@@ -431,7 +458,6 @@ body:before{
   text-transform: uppercase;
   color: rgba(244,247,255,.62);
 }
-
 .count{
   font-size: 34px;
   font-weight: 900;
@@ -445,7 +471,21 @@ body:before{
   padding: 8px;
 }
 
-/* legitimacy strip */
+.snapshot-note-title{
+  margin-top: 6px;
+  font-weight: 900;
+  letter-spacing: -0.3px;
+}
+.snapshot-note{
+  margin-top: 4px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: rgba(244,247,255,.62);
+}
+
+/* -----------------------------
+   LEGITIMACY STRIP
+------------------------------ */
 .legitimacy{
   padding: var(--section-pad-y) 0 calc(var(--section-pad-y) + 26px);
 }
@@ -461,7 +501,9 @@ body:before{
   line-height: 1.55;
 }
 
-/* about */
+/* -----------------------------
+   ABOUT
+------------------------------ */
 .about-grid{
   display:grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -488,7 +530,9 @@ body:before{
   line-height: 1.55;
 }
 
-/* join */
+/* -----------------------------
+   JOIN
+------------------------------ */
 .join-box{
   border-radius: 20px;
   padding: 16px;
@@ -522,9 +566,7 @@ body:before{
   backdrop-filter: blur(10px);
 }
 
-.join-form input::placeholder{
-  color: rgba(244,247,255,.45);
-}
+.join-form input::placeholder{ color: rgba(244,247,255,.45); }
 
 .join-form input:focus{
   border-color: rgba(72,183,255,.26);
@@ -569,7 +611,6 @@ body:before{
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
 
-  /* cleaner look */
   scrollbar-width: none;
 }
 .slider-track::-webkit-scrollbar{ display:none; }
@@ -579,13 +620,12 @@ body:before{
   flex: 0 0 min(420px, 82vw);
 }
 
-/* subtle “fade” edges so it looks premium */
 .slider::before,
 .slider::after{
   content:"";
   position:absolute;
   top: 0;
-  bottom: 36px; /* keep dots visible */
+  bottom: 36px;
   width: 44px;
   pointer-events:none;
   z-index: 1;
@@ -599,7 +639,6 @@ body:before{
   background: linear-gradient(270deg, rgba(2,4,11,.65), transparent);
 }
 
-/* buttons */
 .slider-btn{
   position: absolute;
   top: 40%;
@@ -671,17 +710,13 @@ body:before{
   .slider::before, .slider::after{ width: 34px; }
 }
 
-/* --------------------------------
-   WHY SLIDER = BORDER ONLY (no boxes)
----------------------------------- */
+/* WHY SLIDER = BORDER ONLY (no boxes) */
 .slider[data-slider="why"] .slider-track{
   gap: 0;
   padding: 0;
   border-top: 1px solid rgba(255,255,255,.10);
   border-bottom: 1px solid rgba(255,255,255,.10);
 }
-
-/* remove the "card" look only inside this slider */
 .slider[data-slider="why"] .info-card{
   background: transparent;
   border: 0;
@@ -690,26 +725,10 @@ body:before{
   padding: 18px 22px;
   transition: none;
 }
-
-/* stop hover lifting on this section */
-.slider[data-slider="why"] .info-card:hover{
-  transform: none;
-}
-
-/* separator between slides */
-.slider[data-slider="why"] .slide{
-  border-right: 1px solid rgba(255,255,255,.10);
-}
-
-/* no border on last slide */
-.slider[data-slider="why"] .slide:last-child{
-  border-right: 0;
-}
-
-/* spacing polish */
-.slider[data-slider="why"] .why-title{
-  margin-bottom: 10px;
-}
+.slider[data-slider="why"] .info-card:hover{ transform:none; }
+.slider[data-slider="why"] .slide{ border-right: 1px solid rgba(255,255,255,.10); }
+.slider[data-slider="why"] .slide:last-child{ border-right: 0; }
+.slider[data-slider="why"] .why-title{ margin-bottom: 10px; }
 
 /* full width breakout */
 .full-bleed{
@@ -720,17 +739,12 @@ body:before{
   margin-left: -50vw;
   margin-right: -50vw;
 }
-
-/* add some safe side padding so content isn't glued to the edge */
 .full-bleed .slider-track{
   padding-left: max(16px, env(safe-area-inset-left));
   padding-right: max(16px, env(safe-area-inset-right));
 }
-
-/* keep arrows aligned nicely near the edges */
 .full-bleed .slider-btn.prev{ left: 10px; }
 .full-bleed .slider-btn.next{ right: 10px; }
-
 
 /* -----------------------------
    SKINS GRID + CARDS
@@ -802,14 +816,12 @@ body:before{
     radial-gradient(360px 220px at 90% 32%, rgba(170,60,230,.50), transparent 62%),
     linear-gradient(135deg, rgba(120,35,170,.70), rgba(12,8,18,.55));
 }
-
 .rarity-covert::before{
   background:
     radial-gradient(320px 190px at 20% 18%, rgba(255,90,90,.60), transparent 60%),
     radial-gradient(360px 220px at 90% 32%, rgba(180,30,45,.55), transparent 62%),
     linear-gradient(135deg, rgba(120,18,26,.72), rgba(20,8,12,.55));
 }
-
 .rarity-rare-special::before{
   background:
     radial-gradient(320px 190px at 20% 18%, rgba(255,240,170,.50), transparent 60%),
@@ -847,7 +859,7 @@ body:before{
   color: rgba(244,247,255,.95);
 }
 
-/* price badge INSIDE skin cards */
+/* price badge inside skin cards */
 .skin-price{
   position: absolute;
   top: 14px;
@@ -871,7 +883,6 @@ body:before{
   color: rgba(244,247,255,.94);
 }
 
-/* image below text, smaller */
 .skin-img{
   position: relative;
   z-index: 2;
@@ -891,7 +902,7 @@ body:before{
 }
 
 /* -----------------------------
-   PRICE SNAPSHOT 
+   PRICE SNAPSHOT
 ------------------------------ */
 .price-panel{
   padding: var(--section-pad-y) 0 calc(var(--section-pad-y) + 26px);
@@ -935,7 +946,6 @@ body:before{
   border-radius: 999px;
   transition: background .15s ease, transform .15s ease, color .15s ease;
 }
-
 .seg:hover{ transform: translateY(-1px); }
 
 .seg.active{
@@ -944,7 +954,6 @@ body:before{
   border: 1px solid rgba(255,255,255,.10);
 }
 
-/* rows */
 .price-list{
   margin-top: 14px;
   display:flex;
@@ -971,19 +980,17 @@ body:before{
   letter-spacing: -0.2px;
   color: rgba(244,247,255,.94);
 }
-
 .price-sub{
   margin-top: 4px;
   font-size: 12px;
   color: rgba(244,247,255,.70);
 }
-
 .price-value{
   font-weight: 900;
   letter-spacing: -0.2px;
 }
 
-/* delta badge (used in rows + in skin cards) */
+/* delta badge */
 .delta{
   display:inline-flex;
   align-items:center;
@@ -996,21 +1003,15 @@ body:before{
   letter-spacing: .2px;
   color: rgba(244,247,255,.90);
 }
-
 .price-right .delta{ justify-self: end; }
 
 .delta.up{
   border-color: rgba(34,211,197,.35);
   box-shadow: 0 0 0 1px rgba(34,211,197,.10) inset;
 }
-
 .delta.down{
   border-color: rgba(255,90,90,.35);
   box-shadow: 0 0 0 1px rgba(255,90,90,.10) inset;
-}
-
-.price-foot{
-  margin-top: 10px;
 }
 
 .muted{
@@ -1019,77 +1020,12 @@ body:before{
 }
 
 /* -----------------------------
-   RESPONSIVE
------------------------------- */
-@media (max-width: 900px){
-  .hero{ padding-top: 42px; }
-  .hero-sub{ font-size: 16px; }
-
-  .step-grid, .why-grid{ grid-template-columns: 1fr; }
-  .about-grid{ grid-template-columns: 1fr; }
-  .snapshot{ grid-template-columns: 1fr; }
-  .snapshot-cta{ justify-content: flex-start; padding: 0; }
-
-  .skins-grid{ grid-template-columns: 1fr; }
-  .skin-img{ width: min(380px, 92%); max-height: 120px; }
-
-  .footer-inner{
-  flex-direction: column;
-  align-items: flex-start;
-}
-
-.footer-right{
-  margin-top: 10px;
-}
-
-}
-
-@media (max-width: 720px){
-  .logo{ width: 42px; height: 42px; }
-  .btn{ padding: 9px 14px; font-weight: 700; }
-
-  .section{ padding-top: 22px; }
-  .join-form{ flex-direction: column; align-items: stretch; }
-  .join-form input{ min-width: 0; width: 100%; }
-  .join-form button{ width: 100%; }
-
-  .price-row{
-    grid-template-columns: 1fr;
-    gap: 10px;
-  }
-  .price-right .delta{ justify-self: start; }
-  .price-head{ align-items: flex-start; flex-direction: column; }
-}
-
-
-@media (max-width: 520px){
-  .actions{ gap: 12px; }
-  .btn{ padding: 9px 12px; font-size: 14px; }
-
-  .skin-price{ top: 12px; right: 12px; }
-  .skin-price-val{ padding: 7px 10px; }
-  .delta{ padding: 7px 10px; }
-}
-
-@media (prefers-reduced-motion: reduce){
-  .btn, .seg, .skin-card{ transition: none; }
-  .btn:hover, .seg:hover, .skin-card:hover{ transform: none; }
-}
-
-/* -----------------------------
    LAYOUT RHYTHM
 ------------------------------ */
-main{
-  padding-bottom: 56px;
-}
+main{ padding-bottom: 56px; }
 
-main > section.container{
-  scroll-margin-top: 92px;
-}
-
-main > section.container + section.container{
-  margin-top: 6px;
-}
+main > section.container{ scroll-margin-top: 92px; }
+main > section.container + section.container{ margin-top: 6px; }
 
 /* -----------------------------
    FOOTER
@@ -1168,11 +1104,7 @@ main > section.container + section.container{
   color: rgba(244,247,255,.78);
   transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
 }
-
-.social svg{
-  fill: currentColor;
-}
-
+.social svg{ fill: currentColor; }
 .social:hover{
   transform: translateY(-2px);
   border-color: rgba(72,183,255,.26);
@@ -1180,159 +1112,54 @@ main > section.container + section.container{
   color: rgba(244,247,255,.92);
 }
 
-.top-split{
-  width:min(var(--container), calc(100% - 2rem));
-  margin:0 auto;
-  display:grid;
-  grid-template-columns: minmax(0, 720px) minmax(0, 1fr);
-  gap: clamp(18px, 4vw, 64px);
-  align-items:start;
-}
-
-.top-left{ --container: 720px; }
-
-.top-right{
-  padding-top: 76px;
-  padding-bottom: 36px;
-}
-
-.hero-visual{
-  position: relative;
-  display: block;                          /* allow it to take space */
-  width: clamp(520px, 60vw, 700px);       /* <-- BIGGER here */
-  margin-left: auto;                       /* optional: center */
-  margin-right: auto;                      /* optional: center */
-  border-radius: 22px;
-  border: 1px solid rgba(255,255,255,.12);
-  overflow: hidden;
-}
-
-.hero-visual .hero-img{
-  position: static;                        /* border fits image */
-  display: block;
-  width: 100%;
-  height: auto;
-  object-fit: contain;                     /* no crop */
-  object-position: center;
-}
-
-.hero-visual{
-  animation: heroSlideIn 1.7s cubic-bezier(.2,.9,.2,1) both;
-  will-change: transform, opacity;
-}
-
-@keyframes heroSlideIn{
-  from{ transform: translateX(-1000px); opacity: 0; }
-  to  { transform: translateX(0);     opacity: 1; }
-}
-
-@media (prefers-reduced-motion: reduce){
-  .hero-visual{ animation: none; }
-}
-
-.snapshot-note-title{
-  margin-top: 6px;
-  font-weight: 900;
-  letter-spacing: -0.3px;
-}
-
-.snapshot-note{
-  margin-top: 4px;
-  font-size: 13px;
-  line-height: 1.55;
-  color: rgba(244,247,255,.62);
-}
-/* =========================
-   MOBILE FIX PACK (paste at bottom)
-   ========================= */
-
-@media (max-width: 600px){
-
-  /* Stop the page feeling cramped + fix iOS safe areas */
-  body{
-    padding-left: env(safe-area-inset-left);
-    padding-right: env(safe-area-inset-right);
+/* -----------------------------
+   RESPONSIVE
+------------------------------ */
+@media (max-width: 900px){
+  :root{
+    --section-pad-y: var(--section-pad-y-sm);
+    --section-head-gap: var(--section-head-gap-sm);
   }
 
-  /* NAV: make buttons full width in the dropdown, larger tap targets */
-  .btn{
-    min-height: 44px;          /* proper tap target */
-    font-size: 14px;
+  /* Make the hero image go UNDER the trustline:
+     HERO -> IMAGE -> HOW (no HTML changes) */
+  .top-left{ display: contents; }
+
+  .top-split{
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "hero"
+      "media"
+      "how";
+    gap: 18px;
   }
 
-  .nav-shell{
-    padding: 12px 0;
-    grid-template-columns: auto 1fr auto;
+  .top-split .hero{ grid-area: hero; }
+  .top-split #how{ grid-area: how; }
+  .top-split .top-right{ grid-area: media; }
+
+  .top-right{
+    padding-top: 0;
+    padding-bottom: 0;
   }
 
-  .actions{
-    left: 12px;
-    right: 12px;
-    top: 70px;
-  }
+  .hero{ padding-top: 42px; }
+  .hero-sub{ font-size: 16px; }
 
-  /* HERO: make it phone-first */
-  .hero{
-    padding: 44px 0 18px;
-  }
-
-  .hero-copy{
-    text-align: left;
-  }
-
-  h1{
-    font-size: 34px;          /* clamp can still get too big */
-    line-height: 1.05;
-  }
-
-  .hero-sub{
-    font-size: 15px;
-    line-height: 1.55;
-  }
-
-  /* Stack CTAs and make them full width */
   .hero-ctas{
-    display: grid;
+    display:grid;
     grid-template-columns: 1fr;
     gap: 10px;
   }
-  .hero-ctas .btn{
-    width: 100%;
-  }
-
-  /* HERO IMAGE: make it visually big WITHOUT cropping */
-  .hero-media{
-    padding-top: 14px;
-  }
+  .hero-ctas .btn{ width: 100%; }
 
   .hero-visual{
-    border-radius: 18px;
-    /* give it a stable "frame" on mobile */
-    aspect-ratio: 16 / 9;
-    display: grid;
-    place-items: center;
-  }
-
-  .hero-visual .hero-img{
     width: 100%;
-    height: 100%;
-    object-fit: contain;      /* NO crop */
-    object-position: center;
+    max-width: 700px;
+    border-radius: 18px;
   }
 
-  /* HOW / WHY grids: single column + less padding */
-  .step-grid,
-  .why-grid{
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .info-card{
-    padding: 14px;
-  }
-
-  /* FULL-BLEED: 100vw + negative margins causes weird mobile jitter.
-     On phones: turn it into normal width with small edge padding */
+  /* no iOS side-gap jitter from 100vw breakout */
   .full-bleed{
     width: 100%;
     left: auto;
@@ -1341,216 +1168,47 @@ main > section.container + section.container{
     margin-right: 0;
   }
 
-  .full-bleed .slider-track{
-    padding-left: 12px;
-    padding-right: 12px;
-  }
+  .step-grid, .why-grid{ grid-template-columns: 1fr; }
+  .about-grid{ grid-template-columns: 1fr; }
+  .snapshot{ grid-template-columns: 1fr; }
+  .snapshot-cta{ justify-content: flex-start; padding: 0; }
 
-  /* Slider: make each card almost full width so it feels intentional */
-  .slide{
-    flex: 0 0 92vw;
-  }
+  .skins-grid{ grid-template-columns: 1fr; }
+  .skin-img{ width: min(380px, 92%); max-height: 120px; }
 
-  /* Snapshot: reduce padding + make it tighter */
-  .snapshot{
-    padding: 14px;
-    gap: 12px;
+  .footer-inner{
+    flex-direction: column;
+    align-items: flex-start;
   }
-  .count{
-    font-size: 28px;
-  }
+  .footer-right{ margin-top: 10px; }
+}
 
-  /* Skins: keep cards clean on small screens */
-  .skins-grid{
-    gap: 14px;
-  }
-  .skin-card{
-    padding: 16px;
-  }
-  .skin-img{
-    max-height: 110px;
-  }
+@media (max-width: 720px){
+  .logo{ width: 42px; height: 42px; }
+  .btn{ padding: 9px 14px; font-weight: 700; min-height: 44px; }
 
-  /* Price rows: already stack at 720px, but tighten spacing */
+  .join-form{ flex-direction: column; align-items: stretch; }
+  .join-form input{ min-width: 0; width: 100%; }
+  .join-form button{ width: 100%; }
+
   .price-row{
-    padding: 12px 14px;
+    grid-template-columns: 1fr;
+    gap: 10px;
   }
-
-  /* Footer: less air */
-  main{ padding-bottom: 36px; }
-  .site-footer{ margin-top: 24px; }
+  .price-right .delta{ justify-self: start; }
+  .price-head{ align-items: flex-start; flex-direction: column; }
 }
 
-@media (max-width: 380px){
-  h1{ font-size: 30px; }
-  .hero-kicker{ font-size: 11px; }
+@media (max-width: 520px){
+  .actions{ gap: 12px; }
+  .btn{ padding: 9px 12px; font-size: 14px; }
+
+  .skin-price{ top: 12px; right: 12px; }
+  .skin-price-val{ padding: 7px 10px; }
+  .delta{ padding: 7px 10px; }
 }
 
-/* =========================
-   iOS / Mobile background FIX
-   Paste at the very bottom
-   ========================= */
-
-/* 1) Prevent iOS "white/grey" canvas showing through */
-html{
-  background: #02040b; /* fallback behind everything */
+@media (prefers-reduced-motion: reduce){
+  .btn, .seg, .skin-card{ transition: none; }
+  .btn:hover, .seg:hover, .skin-card:hover{ transform: none; }
 }
-
-/* 2) Make body always paint a solid base */
-body{
-  background-color: #02040b;
-  min-height: 100dvh; /* modern mobile viewport */
-}
-
-/* 3) iOS hates blend-mode + fixed overlays (causes grey/washed/blank areas) */
-@media (max-width: 900px){
-  body::before{
-    display: none !important; /* kill the noise layer on phones */
-  }
-}
-
-/* 4) Force hero to stack on mobile (your screenshot shows it still 2-col) */
-@media (max-width: 980px){
-  .hero.hero-split{
-    grid-template-columns: 1fr !important;
-  }
-  .hero-media{
-    padding-top: 16px;
-  }
-}
-
-/* 5) full-bleed 100vw trick causes iOS side gaps / weird white space */
-@media (max-width: 900px){
-  .full-bleed{
-    width: 100% !important;
-    left: auto !important;
-    right: auto !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-  }
-}
-
-/* =========================
-   MOBILE: background fills whole page + hero image under text
-   Paste at the VERY bottom
-   ========================= */
-
-@media (max-width: 900px){
-
-  /* 1) Make sure there is NEVER a white/grey canvas behind the page */
-  html, body{
-    height: 100%;
-    background: #02040b !important;          /* fallback behind everything */
-  }
-
-  /* Put your real site background on BODY so it covers the whole scroll */
-  body{
-    min-height: 100dvh;
-    background-color: #02040b !important;
-
-    /* If your desktop uses gradients, keep them on mobile too */
-    background-image:
-      radial-gradient(1200px 700px at 60% 15%, rgba(24,66,105,.58), transparent 60%),
-      radial-gradient(900px 520px at 20% 30%, rgba(35,110,170,.35), transparent 60%),
-      radial-gradient(700px 420px at 70% 60%, rgba(160,120,40,.12), transparent 65%),
-      linear-gradient(180deg, #02040b, #061528) !important;
-
-    background-attachment: scroll !important; /* iOS + fixed = bugs/grey */
-  }
-
-  /* 2) KILL any white wrapper backgrounds that are overriding body */
-  main, .page, .wrapper, .layout, .content, .site, .app{
-    background: transparent !important;
-  }
-
-  /* If you have a big hero “panel” background ONLY on the left, force full width */
-  .hero, .hero-left, .hero-content, .hero-copy{
-    width: 100% !important;
-    max-width: none !important;
-  }
-
-  /* 3) STACK hero so image goes UNDER the text block (including that rules line) */
-  .hero-inner, .hero-grid, .hero-split, .hero-layout{
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: stretch !important;
-  }
-
-  /* Put media AFTER the copy on mobile */
-  .hero-media, .hero-right, .hero-image{
-    order: 99 !important;
-    margin-top: 14px !important;
-  }
-
-  /* Make hero image big on mobile without cropping */
-  .hero-visual, .hero-media, .hero-image{
-    width: 100% !important;
-  }
-
-  .hero-img, .hero-visual img, .hero-image img{
-    width: 100% !important;
-    height: auto !important;
-    max-width: 100% !important;
-    object-fit: contain !important;
-    object-position: center !important;
-    display: block !important;
-  }
-
-  /* 4) Stop 100vw/negative-margin sections from creating white side gaps */
-  .full-bleed{
-    width: 100% !important;
-    left: auto !important;
-    right: auto !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-  }
-}
-
-/* =========================
-   MOBILE HERO ORDER FIX (no HTML changes)
-   Hero -> Image -> How
-   ========================= */
-
-.top-split{
-  grid-template-areas:
-    "hero media"
-    "how  media";
-}
-
-.top-left{ display: contents; } /* lets children become grid items */
-
-.top-split .hero{ grid-area: hero; }
-.top-split #how{ grid-area: how; }
-.top-split .top-right{ grid-area: media; }
-
-@media (max-width: 900px){
-  .top-split{
-    grid-template-columns: 1fr !important;
-    grid-template-areas:
-      "hero"
-      "media"
-      "how";
-    gap: 18px !important;
-  }
-
-  .top-right{
-    padding-top: 0 !important;
-    padding-bottom: 0 !important;
-  }
-
-  .hero-visual{
-    width: 100% !important;
-    max-width: 100% !important;
-    border-radius: 18px;
-  }
-
-  /* keep image big + no crop */
-  .hero-visual .hero-img{
-    width: 100% !important;
-    height: auto !important;
-    object-fit: contain !important;
-  }
-}
-
-
-
