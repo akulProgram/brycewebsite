@@ -1212,3 +1212,37 @@ main > section.container + section.container{ margin-top: 6px; }
   .btn, .seg, .skin-card{ transition: none; }
   .btn:hover, .seg:hover, .skin-card:hover{ transform: none; }
 }
+
+/* =========================
+   ABOUT PAGE TYPO FIX
+   ========================= */
+
+/* Make About hero headline + copy smaller than landing page */
+.about-page .hero h1,
+body.about .hero h1,
+main.about .hero h1{
+  font-size: clamp(28px, 5.2vw, 44px);
+  line-height: 1.10;
+  letter-spacing: -0.6px;
+}
+
+.about-page .hero-sub,
+body.about .hero-sub,
+main.about .hero-sub{
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+/* On small phones, tighten even more */
+@media (max-width: 520px){
+  .about-page .hero h1,
+  body.about .hero h1,
+  main.about .hero h1{
+    font-size: 30px;
+  }
+  .about-page .hero-sub,
+  body.about .hero-sub,
+  main.about .hero-sub{
+    font-size: 15px;
+  }
+}
