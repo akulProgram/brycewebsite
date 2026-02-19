@@ -1384,4 +1384,49 @@ main > section.container + section.container{
   .hero-kicker{ font-size: 11px; }
 }
 
+/* =========================
+   iOS / Mobile background FIX
+   Paste at the very bottom
+   ========================= */
+
+/* 1) Prevent iOS "white/grey" canvas showing through */
+html{
+  background: #02040b; /* fallback behind everything */
+}
+
+/* 2) Make body always paint a solid base */
+body{
+  background-color: #02040b;
+  min-height: 100dvh; /* modern mobile viewport */
+}
+
+/* 3) iOS hates blend-mode + fixed overlays (causes grey/washed/blank areas) */
+@media (max-width: 900px){
+  body::before{
+    display: none !important; /* kill the noise layer on phones */
+  }
+}
+
+/* 4) Force hero to stack on mobile (your screenshot shows it still 2-col) */
+@media (max-width: 980px){
+  .hero.hero-split{
+    grid-template-columns: 1fr !important;
+  }
+  .hero-media{
+    padding-top: 16px;
+  }
+}
+
+/* 5) full-bleed 100vw trick causes iOS side gaps / weird white space */
+@media (max-width: 900px){
+  .full-bleed{
+    width: 100% !important;
+    left: auto !important;
+    right: auto !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
+
+
 
