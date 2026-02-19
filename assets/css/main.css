@@ -1788,3 +1788,8 @@ html { scroll-behavior: smooth; }
     width: 100%;
   }
 }
+
+/* Push the hero image down a bit */
+.hero-visual{
+  margin-top: 100%; /* tweak: 12px, 20px, 40px */
+}
