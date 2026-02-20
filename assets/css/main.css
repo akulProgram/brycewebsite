@@ -26,6 +26,7 @@ html{
   background: var(--bg0); /* prevents iOS grey/white canvas */
 }
 
+
 body{
   margin:0;
   min-height: 100%;
@@ -83,8 +84,9 @@ body::before{
   z-index: 10;
 
   backdrop-filter: blur(12px);
-  background: rgba(2,4,11,.42);
-  border-bottom: 1px solid rgba(255,255,255,.08);
+  background: rgba(46, 53, 61, 0.42);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.185);
+  opacity: 1.9;
 }
 
 .nav-shell{
@@ -119,8 +121,8 @@ body::before{
   height: 46px;
   object-fit: cover;
   border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0,0,0,.45);
-  border: 1px solid rgba(255,255,255,.10);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0);
+
 }
 
 .actions{
