@@ -1793,3 +1793,52 @@ html { scroll-behavior: smooth; }
 .hero-visual{
   margin-top: 100%; /* tweak: 12px, 20px, 40px */
 }
+
+/* -----------------------------
+   LEFT KARA ART (sticks until the Why slider ends)
+------------------------------ */
+.kara-band{
+  position: relative;
+}
+
+/* keep the art out of layout flow (doesn't push content) */
+.kara-stick{
+  position: sticky;
+  top: 88px;          /* below the sticky header */
+  z-index: 0;
+  height: 1px;
+  width: 1px;
+  pointer-events: none;
+}
+
+.kara-stick .kara-img{
+  --kara-w: clamp(120px, 14vw, 220px);
+  position: absolute;
+  top: 0;
+  left: max(12px, calc(50% - (var(--container) / 2) - var(--kara-w) - 26px));
+  width: var(200px);
+  height: auto;
+  opacity: .25;
+  filter: drop-shadow(0 22px 60px rgba(0,0,0,.55));
+}
+
+/* ensure content is always above the art if they overlap */
+.kara-band > *:not(.kara-stick){
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 1100px){
+  .kara-stick{ display: none; }
+}
+
+.kara-rail{
+  animation: kara-breathe 7s ease-in-out infinite;
+  transform-origin: center;
+  will-change: transform;
+}
+
+@keyframes kara-breathe{
+  0%,100% { transform: translateY(0) scale(1); opacity: .95; }
+  50%     { transform: translateY(-10px) scale(1.02); opacity: 1; }
+}
