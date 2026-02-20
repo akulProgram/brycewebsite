@@ -610,8 +610,9 @@ body::before{
   scroll-snap-type: x mandatory;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
-
+  height: 125px;
   scrollbar-width: none;
+  font-size: large;
 }
 .slider-track::-webkit-scrollbar{ display:none; }
 
