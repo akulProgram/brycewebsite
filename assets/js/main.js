@@ -305,3 +305,19 @@
     initAll();
   }
 })();
+
+(function () {
+  const WIDGET_ID = "6995b35a95fbc53e9d9e4145";
+  const SRC = "https://widgets.leadconnectorhq.com/loader.js";
+
+  // If it already exists, stop.
+  if (document.querySelector(`script[src="${SRC}"][data-widget-id="${WIDGET_ID}"]`)) return;
+
+  const s = document.createElement("script");
+  s.src = SRC;
+  s.async = true;
+  s.setAttribute("data-resources-url", "https://widgets.leadconnectorhq.com/chat-widget/loader.js");
+  s.setAttribute("data-widget-id", WIDGET_ID);
+
+  document.head.appendChild(s);
+})();
