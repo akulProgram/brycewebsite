@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Blog — ClutchTrades</title>
+  <title>Post — ClutchTrades</title>
   <link rel="icon" type="image/png" href="assets/img/favicon2.png">
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="./assets/css/main.css" />
 </head>
 
-<body class="blog-page">
+<body class="post-page">
   <header class="topbar">
     <div class="nav-shell">
       <a class="brand" href="./index.html" aria-label="ClutchTrades Home">
@@ -23,86 +23,45 @@
       </a>
 
       <nav class="actions" aria-label="Primary">
-        <a class="btn" href="./blog.html" aria-current="page">Blog</a>
-        <a class="btn" href="./login.html">Login</a>
+        <a class="btn" href="./blog.html">Blog</a>
         <a class="btn" href="./about.html">About us</a>
+        <a class="btn" href="./login.html">Login</a>
       </nav>
     </div>
   </header>
 
   <main>
-    <div class="kara-band" aria-label="Blog intro with art">
-      <div class="kara-stick" aria-hidden="true">
-        <img class="kara-img" src="./assets/img/bayo.png" alt="" loading="lazy" decoding="async" />
+    <section class="container hero post-hero" aria-label="Post header">
+      <p class="hero-kicker">Blog</p>
+
+      <div class="post-breadcrumbs">
+        <a href="./blog.html" class="post-crumb">← Back to Blog</a>
       </div>
 
-      <section class="container hero" aria-label="Blog">
-        <p class="hero-kicker">Blog</p>
-        <h1>Updates, build logs &amp; market notes.</h1>
-        <p class="hero-sub">
-          This is where you drop announcements, patch notes, competition write-ups, and market analysis.
-          The page is already wired for search + category filtering — you can replace the placeholder posts whenever you’re ready.
-        </p>
+      <h1 id="postTitle">Loading…</h1>
 
-        <div class="hero-ctas">
-          <a class="btn primary" href="#posts">Browse posts</a>
-          <a class="btn" href="./index.html#how">How it works</a>
+      <div class="post-meta" aria-label="Post meta">
+        <span class="chip" id="postCategory">—</span>
+        <span class="chip" id="postDate">—</span>
+        <span class="chip" id="postMinutes">—</span>
+      </div>
+
+      <p class="hero-sub" id="postExcerpt"> </p>
+    </section>
+
+    <section class="container section" aria-label="Post content">
+      <div class="post-article">
+        <div class="post-cover" id="postCover" hidden>
+          <img id="postCoverImg" alt="" loading="lazy" decoding="async" />
         </div>
 
-        <div class="trustline">
-          Clean write-ups <span class="dot">•</span> No fluff <span class="dot">•</span> Easy to expand later
+        <div class="post-tags" id="postTags"></div>
+
+        <div class="prose" id="postBody">
+          <p class="muted">If this never loads, your slug is missing or doesn’t match anything in <code>blog.html</code>’s JSON.</p>
         </div>
-      </section>
-
-      <section id="posts" class="container section" aria-label="Blog posts">
-        <div class="section-head">
-          <h2>Latest posts</h2>
-          <p>Search, filter, and feature a post — even before you’ve written the real content.</p>
-        </div>
-
-        <div class="blog-controls" aria-label="Blog controls">
-          <label class="sr-only" for="blogSearch">Search posts</label>
-          <input class="field" id="blogSearch" type="search" placeholder="Search posts…" autocomplete="off" />
-
-          <label class="sr-only" for="blogCategory">Filter by category</label>
-          <select class="field" id="blogCategory">
-            <option value="all">All categories</option>
-          </select>
-        </div>
-
-        <div id="blogFeatured" class="post-featured" aria-label="Featured post"></div>
-
-        <div id="blogGrid" class="blog-grid" aria-label="Posts grid"></div>
-
-        <div id="blogEmpty" class="blog-empty info-card" hidden>
-          <h3 style="margin:0 0 8px;">No posts found</h3>
-          <p style="margin:0;">Try a different search or switch the category filter back to “All”.</p>
-        </div>
-
-        <noscript>
-          <div class="info-card" style="margin-top: 16px;">
-            <h3 style="margin:0 0 8px;">JavaScript is disabled</h3>
-            <p style="margin:0;">This blog page uses a tiny script to render posts and filters. Enable JS or hardcode your posts directly in the HTML.</p>
-          </div>
-        </noscript>
-
-        <!--
-          ✅ HOW TO ADD YOUR REAL POSTS
-          Edit: assets/js/blog-data.js
-
-          Each post needs:
-          - slug (unique)
-          - title
-          - excerpt
-          - date (YYYY-MM-DD)
-          - category
-          - tags (array)
-          - minutes (number)
-          - cover (optional image path)
-          - content (HTML string)
-        -->
-      </section>
-    </div>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer" aria-label="Footer">
